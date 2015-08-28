@@ -10,9 +10,14 @@
 #   SQLDeveloper***
 #   Sublime Text 3
 
-echo -e "\nAtualizando sitema...\n"
-sudo apt-get update
-echo -e "\nSistema atualizado."
+echo -e "\nGostaria de atualizar o sistema antes? s/n"
+read resp
+
+if [ $resp == "s" ]; then
+  echo -e "\nAtualizando sitema...\n"
+  sudo apt-get update
+  echo -e "\nSistema atualizado."
+fi
 echo -e "\nA instalacao dos programas segue ordem alfabetica,\nsalvo excecao quando necessario a instalacao de uma dependencia."
 
 echo -e "\nGostaria de instalar Eclipse Mars? s/n"
@@ -85,3 +90,23 @@ if [ $resp == "s" ]; then
   sudo apt-get update
   sudo apt-get install sublime-text-installer
 fi
+
+#FIXME
+# echo -e "\nGostaria de gerar chave ssh? s/n"
+# read resp
+
+# if [ $resp == "s" ]; then
+#   echo -e "\nInforme o seu usuario! A chave será gerada no diretorio do seu usuario."
+#   read user
+
+#   sudo mkdir -p /home/$user/.ssh
+#   cd /home/$user/.ssh
+
+#   sudo ssh-keygen
+#   sudo ssh-add /home/$user/.ssh/id_rsa
+
+#   sudo touch known_hosts
+
+#   echo -e "\nCopie a chave e cole a na configuracao do seu repositorio remoto!\n"
+#   sudo cat < /home/$user/.ssh/id_rsa.pub
+# fi
