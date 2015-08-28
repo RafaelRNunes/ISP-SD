@@ -19,14 +19,16 @@ echo -e "\nGostaria de instalar Eclipse Mars? s/n"
 read resp
 
 if [ $resp == "s" ]; then
-  echo -e "\nInforme o seu usuario e faça o download do arquivo compactado no seu diretorio Downloads!"
+  echo -e "\nInforme o seu usuario. O download do arquivo compactado sera feito no seu diretorio Downloads!"
   read user
+
+  cd /home/$user/Downloads
 
   wget http://eclipse.c3sl.ufpr.br/technology/epp/downloads/release/mars/R/eclipse-jee-mars-R-linux-gtk-x86_64.tar.gz -O eclipse.tar.gz
   sudo tar -zxvf /home/$user/Downloads/eclipse.tar.gz -C /opt/
   sudo mv /opt/eclipse*/ /opt/eclipse
   sudo touch -c /usr/share/applications/eclipse.desktop
-  echo "[Desktop Entry]
+  sudo echo "[Desktop Entry]
   Name=Eclipse 4
   Type=Application
   Exec=/opt/eclipse/eclipse
@@ -35,7 +37,7 @@ if [ $resp == "s" ]; then
   Comment=Integrated Development Environment
   NoDisplay=false
   Categories=Development;IDE;
-  Name[en]=Eclipse" > eclipse.desktop
+  Name[en]=Eclipse" > /usr/share/applications/eclipse.desktop
 fi
 
 echo -e "\nGostaria de instalar Git? s/n"
