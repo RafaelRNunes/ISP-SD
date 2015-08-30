@@ -7,8 +7,12 @@
 #   Google Chrome
 #   Java 8
 #   OpenJdk-7
-#   SQLDeveloper***
+#   Rvm
+#   Ruby
+#   Rails
+#   SQLDeveloper *Instalar
 #   Sublime Text 3
+#   Ssh-keygen
 
 echo -e "\nGostaria de atualizar o sistema antes? s/n"
 read resp
@@ -110,3 +114,44 @@ fi
 #   echo -e "\nCopie a chave e cole a na configuracao do seu repositorio remoto!\n"
 #   sudo cat < /home/$user/.ssh/id_rsa.pub
 # fi
+
+echo -e "\nGostaria de instalar Rvm, Ruby e Rails? s/n"
+read resp
+
+if [ $resp == "s" ]; then
+  echo -e "\nAdicionando chave publica necessaria...\n"
+  gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+
+  echo -e "\nInstalando curl, dependencia necessaria...\n"
+  sudo apt-get install curl
+
+  echo -e "\nBaixan rvm...\n"
+  curl -L https://get.rvm.io | bash -s stable
+
+  echo -e "\nConfigurando rvm..."
+  source ~/.rvm/scripts/rvm
+
+  echo -e "\nVersão instalada:"
+  rvm -v
+
+  echo -e "\nIntegrando com so..."
+  sudo echo 'PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting' >> ~/.bashrc
+  sudo echo '[[ -s “/usr/local/rvm/scripts/rvm” ]] && source “/usr/local/rvm/scripts/rvm”' >> ~/.bashrc
+  sudo echo '[[ -s “$HOME/.rvm/scripts/rvm” ]] && source “$HOME/.rvm/scripts/rvm”' >> ~/.bashrc
+  source ~/.bashrc
+
+  echo -e "\nArualizando dependencias..."
+  rvm requirements
+
+  echo -e "\nInstalando ruby..."
+  rvm install 2.2.1
+
+  echo -e "\nVersao ruby instalada:\n"
+  ruby -v
+
+  echo -e "\nInstalando rails..."
+  gem install rails
+
+  echo -e "\nVersao ruby instalada:\n"
+  rails -v
+fi
