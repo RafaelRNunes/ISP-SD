@@ -2,17 +2,16 @@
 #
 # Instalando programas para uso no dia a dia
 # Programas:
-#   Eclipse Mars *Arrumar icone desktop
+#   Eclipse Mars
 #   Git
 #   Google Chrome
 #   Java 8
 #   OpenJdk-7
-#   Rvm
-#   Ruby
-#   Rails
-#   SQLDeveloper *Instalar
 #   Sublime Text 3
-#   Ssh-keygen
+#   Ssh-keygen *FIXME
+#   Rvm, Ruby e Rails
+#   Maven
+#   SQLDeveloper
 
 echo -e "\nGostaria de atualizar o sistema antes? s/n"
 read resp
@@ -28,15 +27,12 @@ echo -e "\nGostaria de instalar Eclipse Mars? s/n"
 read resp
 
 if [ $resp == "s" ]; then
-  echo -e "\nInforme o seu usuario. O download do arquivo compactado sera feito no seu diretorio Downloads!"
-  read user
-
-  cd /home/$user/Downloads
+  cd ~/Downloads
 
   wget http://eclipse.c3sl.ufpr.br/technology/epp/downloads/release/mars/R/eclipse-jee-mars-R-linux-gtk-x86_64.tar.gz -O eclipse.tar.gz
-  sudo tar -zxvf /home/$user/Downloads/eclipse.tar.gz -C /opt/
-  sudo mv /opt/eclipse*/ /opt/eclipse
-  sudo touch -c /usr/share/applications/eclipse.desktop
+  sudo tar -zxvf ~/Downloads/eclipse.tar.gz -C ~/
+  sudo mv ~/eclipse*/ ~/eclipse
+  sudo touch -c ~/eclipse.desktop
   sudo echo "[Desktop Entry]
   Name=Eclipse 4
   Type=Application
@@ -46,7 +42,10 @@ if [ $resp == "s" ]; then
   Comment=Integrated Development Environment
   NoDisplay=false
   Categories=Development;IDE;
-  Name[en]=Eclipse" > /usr/share/applications/eclipse.desktop
+  Name[en]=Eclipse" > ~/eclipse.desktop
+
+  cp ~/eclipse.desktop /usr/share/applications
+  rm ~/eclipse.desktop
 fi
 
 echo -e "\nGostaria de instalar Git? s/n"
@@ -154,4 +153,53 @@ if [ $resp == "s" ]; then
 
   echo -e "\nVersao ruby instalada:\n"
   rails -v
+fi
+
+echo -e "\nGostaria de instalar Maven? s/n"
+read resp
+
+if [ $resp == "s" ]; then
+  echo -e "\nInstalando maven..."
+  sudo apt-get install maven
+
+  echo -e "\nVersao"
+  mvn -version
+fi
+
+echo -e "\nGostaria de instalar SQLDeveloper? s/n"
+read resp
+
+if [ $resp == "s" ]; then
+  echo -e "\nFaca download do SQLDeveloper (zip) [http://www.oracle.com/technetwork/pt/developer-tools/sql-developer/downloads/index.htm]
+  e adicione no seu diretorio Downloads antes de prosseguir. Assim que fizer o download pressione Enter."
+  read cont
+
+  echo -e "\nExtraindo e dando permissao de execucao..."
+  sudo unzip ~/Downloads/sqldeveloper-*-no-jre.zip -d ~/
+  sudo chmod +x ~/sqldeveloper/sqldeveloper.sh
+
+  echo -e "\nAdicionando link simbolico..."
+  sudo ln -s ~/sqldeveloper/sqldeveloper.sh /usr/local/bin/sqldeveloper
+
+  sudo chmod 777 ~/sqldeveloper/sqldeveloper.sh
+  sudo echo "#!/bin/bash
+  unset -v GNOME_DESKTOP_SESSION_ID
+  cd ~/sqldeveloper/sqldeveloper/bin && bash sqldeveloper $*" > ~/sqldeveloper/sqldeveloper.sh
+
+  cd ~/
+  sudo touch -c sqldeveloper.desktop
+  echo "[Desktop Entry]
+        Exec=sqldeveloper
+        Terminal=false
+        StartupNotify=true
+        Categories=GNOME;Oracle;
+        Type=Application
+        Icon=~/sqldeveloper/icon.png
+        Name=Oracle SQL Developer" > sqldeveloper.desktop
+
+  sudo cp sqldeveloper.desktop /usr/share/applications/
+
+  sudo update-desktop-database
+
+  sqldeveloper
 fi
